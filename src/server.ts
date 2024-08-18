@@ -6,7 +6,7 @@ app.listen({
 
 }).then(()=>
   
-    console.log('🚀Server Running')
+    console.log('🚀HTTP Server Running')
 
 
 ) 
