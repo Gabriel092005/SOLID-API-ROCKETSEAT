@@ -1,8 +1,9 @@
 import { app } from "./app";
+import { env } from "./Env";
 
 app.listen({
     host:'0.0.0.0',  //evitar problema com o consumo no front
-    port:3333
+    port: env.PORT
 
 }).then(()=>
   
