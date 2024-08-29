@@ -1,6 +1,7 @@
 import { usersRepository } from "@/repositories/users-repository";
 import { invalidCredentialsError } from "./erros/invalid-credentials-error";
 import { User } from "@prisma/client";
+ 
 
 interface AuthenticateUseCaseRequest{
 
@@ -25,7 +26,7 @@ export class AuthenticateUseCase{
         if(!user){
            throw new invalidCredentialsError()
         }
-
+     
 
         return {
             user,

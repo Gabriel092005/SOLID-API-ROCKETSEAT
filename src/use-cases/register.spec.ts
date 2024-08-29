@@ -1,21 +1,27 @@
 
 import { InMemoryUsersRepository } from '@/repositories/In-memory/in-memory-user-repository'
-import {expect , it , describe} from 'vitest'
+import {expect , it , describe, beforeEach} from 'vitest'
 import { RegisterUseCase } from './Register'
 import { UserAreadyExistsError } from './erros/user-already-exists'
+
+
+
+let usersRepository  : InMemoryUsersRepository
+let Sut :RegisterUseCase
 
 describe('Register Use Case',()=>{
     it('should not be able to register', async () => {
 
-        const usersRepository = new InMemoryUsersRepository()
-        const registerUseCase = new RegisterUseCase(usersRepository)
+        beforeEach(()=>{
+              usersRepository =  new InMemoryUsersRepository
+              Sut = new RegisterUseCase(usersRepository) 
+        
+        })
     
-    
-    
-        const {user} = await registerUseCase.Execute({
-            nome :'John Doe',
-            email :'johndoe@gmail.com',
-            password_hash : '123456'
+        const {user} = await Sut.Execute({
+            nome :'Cecilia Manuel',
+            email :'cecilia@gmail.com',
+            password_hash : '1234567890'
         })
     
         expect(user.id).toEqual(expect.any(String))
@@ -23,12 +29,11 @@ describe('Register Use Case',()=>{
     
         it('should not be able to register with same email twice', async () => {
     
-            const usersRepository = new InMemoryUsersRepository()
-            const registerUseCase = new RegisterUseCase(usersRepository)
+      
     
-            const email = 'john@exemple.com'
+            const email = 'johndoe12345678@gmail.com'
     
-              await registerUseCase.Execute({
+              await Sut.Execute({
                 nome :'John Doe',
                 email,
                 password_hash : '123456'
@@ -36,7 +41,7 @@ describe('Register Use Case',()=>{
        
             
            await  expect(()=>
-                 registerUseCase.Execute({
+                 Sut.Execute({
                     nome :'John Doe',
                     email,
                     password_hash : '123456'
