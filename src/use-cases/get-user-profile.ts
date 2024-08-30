@@ -9,7 +9,8 @@ interface GetUserProfileUseCaseRequest{
   
 }
 
-interface   GetUserProfileUseCaseResponse {
+interface  GetUserProfileUseCaseResponse {
+    
     user: User
 }
 
