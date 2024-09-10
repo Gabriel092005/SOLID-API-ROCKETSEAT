@@ -6,27 +6,25 @@ import { InMemoryGymsRepository } from '@/repositories/In-memory/in-memory-gyms-
 import { Decimal } from '@prisma/client/runtime/library'
 
 
-
-
-
 let checkInsRepository:InMemoryCheckInsRepository
 let gymRepository : InMemoryGymsRepository
 let Sut : checkInUseCase
 
 describe('Check-in Use Case',()=>{
-    beforeEach(()=>{
+    beforeEach(async()=>{
         checkInsRepository = new InMemoryCheckInsRepository()
         gymRepository = new InMemoryGymsRepository
         Sut = new checkInUseCase(checkInsRepository,gymRepository)
 
-        gymRepository.itens.push({
+    
+        gymRepository.create({
+
           id:'gym-01',
           title:'Javascript Gym',
           description:'',
           phone:'iPhone 6s',
-          latitude:new Decimal(0),
-          longitude: new Decimal(0),
-
+          latitude:-27.2092052,
+          longitude: -49.6401091,
 
         })
 
@@ -37,7 +35,7 @@ describe('Check-in Use Case',()=>{
     afterEach(()=>{
        vi.useRealTimers()
     })
-    it('it should  be able to check in', async () => { 
+    it('should  be able to check in', async () => { 
 
       
         
@@ -55,7 +53,7 @@ describe('Check-in Use Case',()=>{
       await expect(checkIn.id).toEqual(expect.any(String))
     })
 
-    it('it should not be possible to check in the same day ', async () =>{    
+    it(' should not be possible to check in the same day ', async () =>{    
         vi.setSystemTime(new Date(2024, 7, 20,8,0,0))  
        await  Sut.execute({
 
@@ -76,4 +74,29 @@ describe('Check-in Use Case',()=>{
       })).rejects.toBeInstanceOf(Error)
     })
     
+
+    it('should not be able to check in on distant gym', async () => { 
+
+
+         gymRepository.itens.push({
+          id:'gym-02',
+          title:'Javascript Gym',
+          description:'',
+          phone:'iPhone 6s',
+          latitude:new Decimal(-27.0747279),
+          longitude: new Decimal(-49.4889672)
+
+
+        })
+      await expect(() => Sut.execute({
+           gymId: 'gym-02 ',
+           userId:'user-01',    
+           userLatitude:-27.2092052,
+           userLongitude: -49.6401091
+       
+      })).rejects.toBeInstanceOf(Error)
+    
+  })
+
+
 })

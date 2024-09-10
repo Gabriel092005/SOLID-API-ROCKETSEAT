@@ -6,6 +6,7 @@ export class InMemoryUsersRepository implements usersRepository{
   
   public itens : User[] = []
 
+  
   async findById(id: string){
     const user = this.itens.find(item =>item.id===id)
 
