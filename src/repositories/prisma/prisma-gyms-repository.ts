@@ -4,6 +4,7 @@ import { prisma } from "@/lib/prisma";
 
 
 export class PrismaGysmRepository implements GymRepository{
+    
     async findById(id: string){
         const Gym = await prisma.gym.findUnique({
             where:{

@@ -1,5 +1,5 @@
 
-import { CheckIn, Gym, Prisma } from "@prisma/client";
+import {Gym, Prisma } from "@prisma/client";
 
 export interface FindManyNearByParams
 {

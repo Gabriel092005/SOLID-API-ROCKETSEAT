@@ -3,10 +3,15 @@ import { AppRoutes } from "./http/Routes";
 import { ZodError } from "zod";
 import { error } from "console";
 import { env } from "./Env";
+import fastifyJwt from "@fastify/jwt";
 
 
 
 export const app = fastify()
+app.register(fastifyJwt,{
+    secret : env.JWT_SECRET
+    
+}) 
 app.register(AppRoutes)
 
 app.setErrorHandler((Error,request,reply)=>{

@@ -7,7 +7,7 @@ interface  SearchGymUseCaseRequest{
 
       query : string
       page : number
-
+ 
 }
 
 
@@ -22,17 +22,16 @@ export class SearchGymUseCase {
     constructor( private gymsRepository : GymRepository ) { }
 
 
- async Execute({
-     query,
-     page
-} 
-:SearchGymUseCaseRequest): Promise<SearchGymUseCaseResponse>
+ async Execute({query,page}:SearchGymUseCaseRequest): Promise<SearchGymUseCaseResponse>
 {
 
 
    const gyms = await this.gymsRepository.SearchMany(
     query,
-    page)
+    page,
+    
+
+)
      
    return{
     gyms

@@ -16,9 +16,7 @@ export class InMemoryGymsRepository implements GymRepository{
     const gym = this.itens.find(item =>item.id===id)
     
     if(!gym){
-      
       return null 
-      
     }
     
     return gym

@@ -1,5 +1,4 @@
 import { PrismaUserRepository } from '@/repositories/prisma/prisma-users-repository';
-import { AuthenticateUseCase } from '../authenticate';
 import { GetUserProfileUseCase } from '../get-user-profile';
 
 

@@ -9,8 +9,6 @@ interface  FetchNearByGymUseCaseRequest{
       userLongitude : number
 
 }
-
-
 interface FetchNearByGymUseCaseResponse{
 
     gyms:Gym[]

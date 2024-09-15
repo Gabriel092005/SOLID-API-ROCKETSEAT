@@ -21,12 +21,23 @@ export async function Authenticate(request:FastifyRequest,reply:FastifyReply) {
 
         const authenticateUseCase =  makeAuthenticateUserCase()
 
-     await authenticateUseCase.execute({
+     const {user } =  await authenticateUseCase.execute({
         email
      })
 
-    
-  
+     const token = await reply.jwtSign({},
+      {
+      
+         sign:{
+            sub :user.id
+         },
+   
+         
+      })
+      
+      
+      return reply.status(200).send({token})
+
    }
     catch (error) { 
 
@@ -43,7 +54,6 @@ export async function Authenticate(request:FastifyRequest,reply:FastifyReply) {
        
    }
 
-   return reply.status(200).send({message : 'user authenticated'})
    
 }
 
