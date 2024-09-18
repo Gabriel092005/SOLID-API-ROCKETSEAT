@@ -19,24 +19,42 @@ export async function Authenticate(request:FastifyRequest,reply:FastifyReply) {
     const {email,password_hash} = AuthenticateBodySchema.parse(request.body)
    try {
 
-        const authenticateUseCase =  makeAuthenticateUserCase()
-
+     const authenticateUseCase =  makeAuthenticateUserCase()
      const {user } =  await authenticateUseCase.execute({
         email
      })
-
-     const token = await reply.jwtSign({},
+     const token = await reply.jwtSign(
       {
-      
+         role : user.role
+      },
+      {
          sign:{
             sub :user.id
-         },
-   
-         
+         },         
       })
+   const refreshToken = await reply.jwtSign(
+      {
+         role : user.role 
+
+      },
+
+      {
+         sign:{
+            sub:user.id,
+            expiresIn:'7d',
+         }
+      }
+   )
       
       
-      return reply.status(200).send({token})
+      return reply
+      .setCookie('refreshToken',refreshToken,{
+         path : '/',
+         secure:true,
+         httpOnly:true
+     })
+      .status(200)
+      .send({token})
 
    }
     catch (error) { 

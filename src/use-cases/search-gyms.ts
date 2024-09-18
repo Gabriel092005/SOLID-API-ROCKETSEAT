@@ -13,7 +13,7 @@ interface  SearchGymUseCaseRequest{
 
 interface SearchGymUseCaseResponse{
 
-    gyms:Gym[]
+    gyms : Gym[]
 }
 
 export class SearchGymUseCase {

@@ -6,10 +6,11 @@ interface FetchUserCheckinHistoryUseCaseRequest{
     page : number
 }
 
-interface  FetchUserCheckinHistoryUseCaseResponse {
-    checkIns : CheckIn[]
+interface  FetchUserCheckinHistoryUseCaseResponse
+{
+   checkIns : CheckIn[]
 }
-export class FetchUserCheckinHistorUseCase{
+export class FetchUserCheckinHistoryUseCase{
 
     constructor(
         private checkinsRepository   : CheckInsRepository,
@@ -17,16 +18,11 @@ export class FetchUserCheckinHistorUseCase{
     ){}
 
     async execute
-    ({userId,page} : FetchUserCheckinHistoryUseCaseRequest) : Promise<FetchUserCheckinHistoryUseCaseResponse>{
+    ({userId,page}:FetchUserCheckinHistoryUseCaseRequest) : Promise<FetchUserCheckinHistoryUseCaseResponse>{
         
      const checkIns = await this.checkinsRepository.findManyByUserId(userId,page)
 
-      
-
-      
-        return{
-            checkIns
-        }
+        return{checkIns}
        
 
 

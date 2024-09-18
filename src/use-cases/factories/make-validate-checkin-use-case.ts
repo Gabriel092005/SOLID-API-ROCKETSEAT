@@ -1,11 +1,12 @@
-import { GetUserMetricsUseCase } from '../get-user-metrics';
+
 import { PrismaCheckInsRepository } from '@/repositories/prisma/prisma-checkin-repository';
+import { ValidatecheckInUseCase } from '../validate-checkin';
 
 
 export function makeValidateCheckInUseCase (){
     
     const CheckinsRepository = new PrismaCheckInsRepository
-    const UseCase = new GetUserMetricsUseCase(CheckinsRepository)
+    const UseCase = new ValidatecheckInUseCase(CheckinsRepository)
 
     return UseCase
 }

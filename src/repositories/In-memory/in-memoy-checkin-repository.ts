@@ -58,13 +58,7 @@ export class InMemoryCheckInsRepository implements CheckInsRepository{
   
   
 }
-  
-  
-  
-  
-  
-  
-  
+    
   async Create(data: Prisma.CheckInUncheckedCreateInput) {
     
     const checkIn = {

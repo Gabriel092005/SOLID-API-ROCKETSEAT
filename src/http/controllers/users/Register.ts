@@ -13,9 +13,7 @@ export async function Register(request:FastifyRequest,reply:FastifyReply) {
        email : z.string().email(),
        password_hash: z.string().min(6)
     })
-
-    
-    const {nome,email,password_hash} = RegisterBodySchema.parse(request.body)
+   const {nome,email,password_hash} = RegisterBodySchema.parse(request.body)
    try {
 
         const registerUseCase = makeRegisterUserCase()
@@ -25,6 +23,8 @@ export async function Register(request:FastifyRequest,reply:FastifyReply) {
         email,
         password_hash
      })
+
+      return reply.status(201).send({message:'User Created'})
 
     
   
@@ -36,11 +36,6 @@ export async function Register(request:FastifyRequest,reply:FastifyReply) {
 
          return reply.status(409).send({message : error.message })
       }
-
-
-
-     throw error
-
        
    }
    

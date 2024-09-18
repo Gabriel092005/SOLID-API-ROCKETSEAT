@@ -1,11 +1,13 @@
-import { FetchUserCheckinHistorUseCase } from '../fetch-user-checkin-history';
+
 import { PrismaCheckInsRepository } from '@/repositories/prisma/prisma-checkin-repository';
+import { FetchUserCheckinHistoryUseCase } from '../fetch-user-checkin-history';
 
 
-export function makeGetUserCheckinsUseCase (){
+export function makeFetchUserCheckInHistoryUseCase (){
     
     const CheckinsRepository = new PrismaCheckInsRepository
-    const UseCase = new FetchUserCheckinHistorUseCase(CheckinsRepository)
+    
+    const UseCase = new FetchUserCheckinHistoryUseCase(CheckinsRepository)
 
     return UseCase
 }
