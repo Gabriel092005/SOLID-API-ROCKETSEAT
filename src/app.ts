@@ -1,35 +1,42 @@
 import { fastify } from "fastify";
-import fastifycookie from "@fastify/cookie";
-import { UsersRoutes } from "./http/controllers/users/Routes";
 import { ZodError } from "zod";
-
-import { error } from "console";
 import { env } from "./Env";
-import fastifyJwt from "@fastify/jwt";
-import { GymsRoutes } from "./http/controllers/gyms/routes";
-import { checkinsRoutes } from "./http/controllers/checkin/routes";
+import { error } from "console";
+import { userRoutes, } from "./http/controllers/user/routes";
+import { schoolRoutes } from "./http/controllers/Escola/routes";
+import { matriculaRoutes } from "./http/controllers/matricula/routes";
+import { fastifyJwt } from "@fastify/jwt";
+import fastifyCookie from "@fastify/cookie";
+import { feedbackRoutes } from "./http/controllers/feedback/routes";
+
+
 
 
 
 export const app = fastify()
+
+app.register(userRoutes)
+app.register(schoolRoutes)
+app.register(matriculaRoutes)
+app.register(feedbackRoutes)
+app.register(fastifyCookie)
+
 app.register(fastifyJwt,{
-    secret : env.JWT_SECRET,
+    secret:env.JWT_SECRET,
     cookie:{
         cookieName:'refreshToken',
         signed:false,
     },
     sign:{
-        expiresIn : '10m'
-    },
+        expiresIn:'10min'
+    }
+},
+   
+)
 
-    
-}) 
-app.register(UsersRoutes)
-app.register(GymsRoutes)
-app.register(checkinsRoutes)
-app.register(fastifycookie)
 
 app.setErrorHandler((Error,request,reply)=>{
+    console.log(Error)
 
     if(Error instanceof ZodError){
 
@@ -45,11 +52,12 @@ app.setErrorHandler((Error,request,reply)=>{
         
     }
 
+
+
     return reply
   
     .status(500)
     .send(
         {message : 'internal server error'}
-    )
-    
+    ) 
 })

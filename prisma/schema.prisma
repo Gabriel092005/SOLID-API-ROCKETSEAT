@@ -13,45 +13,112 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+enum School {
+  PUBLICO
+  PRIVADO
+}
+
+enum StatusMatricula {
+  PENDENTE
+  CONFIRMADO
+  REJEITADO
+}
+
 enum Role {
   ADMIN
   MEMBER
 }
 
+enum Aluno {
+  ALUNO
+  RESPONSAVEL
+}
+
+enum StatusAgendamentos {
+  AGENDADO
+  REALIZADO
+  CANCELADO
+}
+
+model escola {
+  id          String @id @default(uuid())
+  name        String
+  adress      String
+  email       String @unique
+  type        School @default(PUBLICO)
+  Description String
+
+  matricula    matricula[]
+  agendamentos agendamentos[]
+  feedback     feedback[]
+  Exame        Exame[]
+
+  @@map("schools")
+}
+
 model User {
-  id            String @id @default(uuid())
+  id            String        @id @unique @default(uuid())
   nome          String
-  email         String @unique
+  email         String        @unique
   password_hash String
-  created_at  DateTime @default(now())
-  role Role  @default(MEMBER)
-  CheckIns CheckIn[]
+  number        String
+  createdAt     DateTime      @default(now())
+  role          Role          @default(MEMBER)
+  Aluno         Aluno         @default(ALUNO)
+  matricula     matricula[] //se for responsavel mais de um aluno
+  Exame         Exame[]
+  feedback      feedback[]
+  notificacao   notificacao[]
 
   @@map("users")
 }
 
-model CheckIn {
-  id           String   @id @default(uuid())
-  created_at   DateTime @default(now())
-  validated_at  DateTime?
+model matricula {
+  id        String          @id @default(uuid())
+  createdAt DateTime        @default(now())
+  status    StatusMatricula @default(PENDENTE)
+  escola    escola          @relation(fields: [escolaId], references: [id])
+  escolaId  String
+  user      User            @relation(fields: [userId], references: [id])
+  userId    String
 
-  User User @relation(fields: [user_id], references: [id])
-
-  user_id String
-  gym     Gym    @relation(fields: [gym_id], references: [id])
-  gym_id   String
-
-  @@map("check_ins")
+  @@map("matricula")
 }
 
-model Gym {
-  id          String    @id @default(uuid())
-  title       String
-  description String?
-  phone       String?
-  latitude    Decimal
-  longitude   Decimal
-  CheckIns     CheckIn[]
+model Exame {
+  id          Int       @id @default(autoincrement())
+  Questions   String
+  Answers     String
+  CreatedAt   DateTime  @default(now())
+  validatedAt DateTime?
+  escola      escola    @relation(fields: [escolaId], references: [id])
+  user        User      @relation(fields: [userId], references: [id])
+  userId      String
+  escolaId    String
+}
 
-  @@map("gyms")
+model agendamentos {
+  id        Int                @id @default(autoincrement())
+  CreatedAt DateTime           @default(now())
+  status    StatusAgendamentos
+  exames    escola             @relation(fields: [escolaId], references: [id])
+  escolaId  String
+}
+
+model feedback {
+  id       String @id @default(uuid())
+  mark     String //de 1 a 5 
+  user     User   @relation(fields: [userId], references: [id])
+  comment  String
+  userId   String
+  escola   escola @relation(fields: [escolaId], references: [id])
+  escolaId String
+}
+
+model notificacao {
+  id      String @id @default(uuid())
+  content String
+  user    User   @relation(fields: [userId], references: [id])
+  userId  String
+  @@map("notif")
 }
